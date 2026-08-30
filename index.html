@@ -32,7 +32,8 @@
             background: var(--bg);
             color: var(--text);
             font-family: "Courier New", monospace;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
         }
 
         /* =========================
@@ -372,48 +373,48 @@
         }
 
         /* =========================
-           LOG (book cipher paragraph)
+           IMAGE (final.jpg)
         ========================= */
 
-        .log {
-            color: #a8a8a8;
+        .img-wrap {
+            display: block;
 
-            font-size: clamp(17px, 2.4vw, 21px);
+            text-decoration: none;
 
-            line-height: 2.05;
+            max-width: 100%;
+        }
 
-            letter-spacing: .5px;
+        .final-img {
+            display: block;
 
-            text-align: left;
-
+            width: 100%;
             max-width: 640px;
 
+            height: auto;
+
             margin: 0 auto;
+
+            border: 1px solid var(--border);
+
+            border-radius: 6px;
+
+            background: rgba(255,255,255,.02);
+
+            transition: border-color .3s ease;
         }
 
-        .cursor {
-            display: inline-block;
-
-            width: 8px;
-            height: 19px;
-
-            margin-left: 5px;
-
-            vertical-align: -3px;
-
-            background: #aaa;
-
-            animation: blink .8s infinite;
+        .img-wrap:hover .final-img {
+            border-color: rgba(255,255,255,.22);
         }
 
-        @keyframes blink {
-            0%,45% {
-                opacity: 1;
-            }
+        .img-caption {
+            margin-top: 18px;
 
-            46%,100% {
-                opacity: 0;
-            }
+            color: #444;
+
+            font-size: 9px;
+
+            letter-spacing: 3px;
         }
 
         /* =========================
@@ -421,12 +422,11 @@
         ========================= */
 
         footer {
-            position: fixed;
+            position: relative;
 
-            bottom: 24px;
+            width: 100%;
 
-            left: 0;
-            right: 0;
+            padding: 30px 20px 40px;
 
             display: flex;
 
@@ -524,7 +524,7 @@
             }
 
             footer {
-                bottom: 18px;
+                padding: 24px 16px 36px;
             }
         }
 
@@ -581,9 +581,21 @@
 
         <section class="card" id="card">
 
-            <p class="log">
-                <span id="typing"></span><span class="cursor"></span>
-            </p>
+            <!-- Final image reference is final.jpg. If final.jpg is not yet present,
+                 onerror swaps in a self-contained inline SVG placeholder for testing.
+                 Once final.jpg exists alongside index.html, it loads normally and
+                 onerror never fires. Nothing else needs to change. -->
+
+            <a href="final.jpg" download class="img-wrap">
+                <img
+                    src="final.jpg"
+                    alt="final"
+                    class="final-img"
+                    onerror="this.onerror=null;this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22640%22 height=%22400%22%3E%3Crect width=%22100%25%22 height=%22100%25%22 fill=%22%230a0a0a%22/%3E%3Crect x=%221%22 y=%221%22 width=%22638%22 height=%22398%22 fill=%22none%22 stroke=%22%23222%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 fill=%22%23555%22 font-family=%22Courier New,monospace%22 font-size=%2214%22 letter-spacing=%223%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22%3EPLACEHOLDER — final.jpg NOT FOUND%3C/text%3E%3C/svg%3E';"
+                >
+            </a>
+
+            <div class="img-caption">↓ final.jpg</div>
 
         </section>
 
@@ -596,43 +608,6 @@
 
 
     <script>
-
-        /* =========================
-           TYPEWRITER
-        ========================= */
-
-        const message =
-            "the archive remembers what the eye forgets and the book was never lost only waiting of all the things kept quiet shadows still speak if you know where to look. long after the lanterns dim and the halls fall silent someone always returns searching tracing fingers across dusty spines hoping the next page remembers them too. every story hides a smaller one inside it folded quietly between the lines waiting for a patient reader who counts instead of skims. some nights the numbers feel like whispers pointing toward a place no map has ever marked a shelf uncatalogued a name unspoken a truth kept safe by nothing more than distance and forgetting. and still whoever finds this far will understand that patience was always the real key not cleverness not luck just attention paid slowly word by word until the shape of the answer finally settles into view.";
-
-        const typing =
-            document.getElementById("typing");
-
-        let index = 0;
-
-        function typeWriter() {
-
-            if (index < message.length) {
-
-                typing.textContent =
-                    message.substring(0, index + 1);
-
-                index++;
-
-                const speed =
-                    10 + Math.random() * 16;
-
-                setTimeout(typeWriter, speed);
-
-            }
-
-        }
-
-        window.addEventListener("load", () => {
-
-            setTimeout(typeWriter, 1200);
-
-        });
-
 
         /* =========================
            SUBTLE MOUSE PARALLAX
