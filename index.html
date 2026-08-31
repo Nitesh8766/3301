@@ -1,660 +1,203 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>BLACK — Private Space</title>
-
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --bg: #030303;
-            --panel: rgba(10, 10, 10, .72);
-            --border: rgba(255, 255, 255, .09);
-            --text: #ededed;
-            --muted: #777;
-            --dim: #333;
-        }
-
-        html,
-        body {
-            width: 100%;
-            height: 100%;
-        }
-
-        body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: "Courier New", monospace;
-            overflow-x: hidden;
-            overflow-y: auto;
-        }
-
-        /* =========================
-           AMBIENT BACKGROUND
-        ========================= */
-
-        .background {
-            position: fixed;
-            inset: 0;
-            z-index: -5;
-
-            background:
-                radial-gradient(
-                    circle at 50% 45%,
-                    rgba(255,255,255,.055),
-                    transparent 28%
-                ),
-                radial-gradient(
-                    circle at 15% 20%,
-                    rgba(255,255,255,.018),
-                    transparent 25%
-                ),
-                #030303;
-
-            animation: ambient 12s ease-in-out infinite alternate;
-        }
-
-        @keyframes ambient {
-            from {
-                transform: scale(1);
-            }
-
-            to {
-                transform: scale(1.08);
-            }
-        }
-
-        /* =========================
-           MOVING GRID
-        ========================= */
-
-        .grid {
-            position: fixed;
-            inset: -100px;
-            z-index: -4;
-
-            opacity: .12;
-
-            background-image:
-                linear-gradient(
-                    rgba(255,255,255,.035) 1px,
-                    transparent 1px
-                ),
-                linear-gradient(
-                    90deg,
-                    rgba(255,255,255,.035) 1px,
-                    transparent 1px
-                );
-
-            background-size: 55px 55px;
-
-            mask-image:
-                radial-gradient(
-                    ellipse at center,
-                    black 10%,
-                    transparent 75%
-                );
-
-            animation: gridMove 25s linear infinite;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>BLACK — Stage 3</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg: #030303;
+    --border: rgba(255,255,255,.09);
+}
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    background: var(--bg);
+    overflow: auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 32px;
+}
+
+/* BLACK theme background */
+.background {
+    position: fixed;
+    inset: 0;
+    z-index: -5;
+
+    background:
+        radial-gradient(
+            circle at 50% 45%,
+            rgba(255,255,255,.055),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 15% 20%,
+            rgba(255,255,255,.018),
+            transparent 25%
+        ),
+        #030303;
+
+    animation: ambient 12s ease-in-out infinite alternate;
+}
+
+@keyframes ambient {
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.08);
+    }
+}
+
+/* Moving grid */
+.grid {
+    position: fixed;
+    inset: -100px;
+    z-index: -4;
+
+    opacity: .12;
+
+    background-image:
+        linear-gradient(
+            rgba(255,255,255,.035) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,.035) 1px,
+            transparent 1px
+        );
+
+    background-size: 55px 55px;
+
+    mask-image:
+        radial-gradient(
+            ellipse at center,
+            black 10%,
+            transparent 75%
+        );
+
+    animation: gridMove 25s linear infinite;
+}
+
+@keyframes gridMove {
+    from {
+        transform: translate(0,0);
+    }
 
-        @keyframes gridMove {
-            from {
-                transform: translate(0, 0);
-            }
+    to {
+        transform: translate(55px,55px);
+    }
+}
 
-            to {
-                transform: translate(55px, 55px);
-            }
-        }
+/* Subtle noise */
+.noise {
+    position: fixed;
+    inset: 0;
 
-        /* =========================
-           NOISE
-        ========================= */
+    z-index: 20;
+    pointer-events: none;
 
-        .noise {
-            position: fixed;
-            inset: 0;
-            z-index: 20;
+    opacity: .025;
 
-            pointer-events: none;
+    background-image:
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
 
-            opacity: .025;
+    animation: noiseMove .25s steps(2) infinite;
+}
 
-            background-image:
-                url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+@keyframes noiseMove {
+    0%,100% {
+        transform: translate(0,0);
+    }
 
-            animation: noiseMove .25s steps(2) infinite;
-        }
+    25% {
+        transform: translate(2px,-1px);
+    }
 
-        @keyframes noiseMove {
-            0% {
-                transform: translate(0,0);
-            }
+    50% {
+        transform: translate(-1px,2px);
+    }
 
-            25% {
-                transform: translate(2px,-1px);
-            }
+    75% {
+        transform: translate(1px,1px);
+    }
+}
 
-            50% {
-                transform: translate(-1px,2px);
-            }
+/* Stage image */
+.stage {
+    width: min(1500px, 100%);
 
-            75% {
-                transform: translate(1px,1px);
-            }
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-            100% {
-                transform: translate(0,0);
-            }
-        }
+.stage img {
+    display: block;
 
-        /* =========================
-           NAVIGATION
-        ========================= */
+    width: auto;
+    height: auto;
 
-        nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
+    max-width: 100%;
+    max-height: calc(100vh - 64px);
 
-            height: 72px;
+    object-fit: contain;
 
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+    border: 1px solid var(--border);
 
-            padding: 0 6%;
+    box-shadow:
+        0 0 50px rgba(0,0,0,.75);
+}
 
-            border-bottom: 1px solid var(--border);
+/* Phone */
+@media (max-width: 700px) {
 
-            background: rgba(3,3,3,.55);
+    body {
+        padding: 12px;
+    }
 
-            backdrop-filter: blur(18px);
-
-            z-index: 10;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-
-            font-size: 13px;
-            letter-spacing: 5px;
-        }
-
-        .brand-dot {
-            width: 7px;
-            height: 7px;
-
-            border-radius: 50%;
-
-            background: #aaa;
-
-            box-shadow:
-                0 0 8px #777,
-                0 0 20px rgba(255,255,255,.15);
-
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%,100% {
-                opacity: .45;
-                transform: scale(.8);
-            }
-
-            50% {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .nav-right {
-            color: #454545;
-
-            font-size: 9px;
-            letter-spacing: 3px;
-        }
-
-        /* =========================
-           MAIN
-        ========================= */
-
-        .screen {
-            min-height: 100vh;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            padding: 100px 20px 60px;
-
-            perspective: 1000px;
-        }
-
-        /* =========================
-           CARD
-        ========================= */
-
-        .card {
-            position: relative;
-
-            width: min(860px, 92vw);
-
-            padding: 75px 55px;
-
-            text-align: center;
-
-            background: var(--panel);
-
-            border: 1px solid var(--border);
-
-            backdrop-filter: blur(24px);
-
-            box-shadow:
-                0 35px 120px rgba(0,0,0,.75),
-                inset 0 1px 0 rgba(255,255,255,.035);
-
-            overflow: hidden;
-
-            animation: cardIn 1.4s cubic-bezier(.2,.8,.2,1) forwards;
-
-            transform-style: preserve-3d;
-
-            transition:
-                transform .15s ease-out,
-                border-color .4s ease;
-        }
-
-        .card:hover {
-            border-color: rgba(255,255,255,.14);
-        }
-
-        @keyframes cardIn {
-            from {
-                opacity: 0;
-                transform:
-                    translateY(35px)
-                    scale(.97);
-                filter: blur(8px);
-            }
-
-            to {
-                opacity: 1;
-                transform:
-                    translateY(0)
-                    scale(1);
-                filter: blur(0);
-            }
-        }
-
-        /* Animated light */
-
-        .card::before {
-            content: "";
-
-            position: absolute;
-
-            width: 300px;
-            height: 300px;
-
-            top: -180px;
-            left: 50%;
-
-            transform: translateX(-50%);
-
-            background:
-                radial-gradient(
-                    circle,
-                    rgba(255,255,255,.055),
-                    transparent 70%
-                );
-
-            pointer-events: none;
-
-            animation: lightMove 7s ease-in-out infinite alternate;
-        }
-
-        @keyframes lightMove {
-            from {
-                transform:
-                    translateX(-65%)
-                    translateY(0);
-            }
-
-            to {
-                transform:
-                    translateX(-35%)
-                    translateY(70px);
-            }
-        }
-
-        /* Top border animation */
-
-        .card::after {
-            content: "";
-
-            position: absolute;
-
-            top: 0;
-            left: -30%;
-
-            width: 30%;
-            height: 1px;
-
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(255,255,255,.5),
-                transparent
-            );
-
-            animation: scan 6s linear infinite;
-        }
-
-        @keyframes scan {
-            0% {
-                left: -30%;
-            }
-
-            100% {
-                left: 100%;
-            }
-        }
-
-        /* =========================
-           IMAGE (final.jpg)
-        ========================= */
-
-        .img-wrap {
-            display: block;
-
-            text-decoration: none;
-
-            max-width: 100%;
-        }
-
-        .final-img {
-            display: block;
-
-            width: 100%;
-            max-width: 640px;
-
-            height: auto;
-
-            margin: 0 auto;
-
-            border: 1px solid var(--border);
-
-            border-radius: 6px;
-
-            background: rgba(255,255,255,.02);
-
-            transition: border-color .3s ease;
-        }
-
-        .img-wrap:hover .final-img {
-            border-color: rgba(255,255,255,.22);
-        }
-
-        .img-caption {
-            margin-top: 18px;
-
-            color: #444;
-
-            font-size: 9px;
-
-            letter-spacing: 3px;
-        }
-
-        /* =========================
-           FOOTER
-        ========================= */
-
-        footer {
-            position: relative;
-
-            width: 100%;
-
-            padding: 30px 20px 40px;
-
-            display: flex;
-
-            justify-content: center;
-
-            color: #252525;
-
-            font-size: 8px;
-
-            letter-spacing: 4px;
-
-            z-index: 5;
-        }
-
-        /* =========================
-           CORNERS
-        ========================= */
-
-        .corner {
-            position: fixed;
-
-            width: 25px;
-            height: 25px;
-
-            opacity: .22;
-
-            z-index: 4;
-        }
-
-        .corner::before,
-        .corner::after {
-            content: "";
-
-            position: absolute;
-
-            background: #777;
-        }
-
-        .corner::before {
-            width: 25px;
-            height: 1px;
-        }
-
-        .corner::after {
-            width: 1px;
-            height: 25px;
-        }
-
-        .top-left {
-            top: 95px;
-            left: 30px;
-        }
-
-        .top-right {
-            top: 95px;
-            right: 30px;
-
-            transform: rotate(90deg);
-        }
-
-        .bottom-left {
-            bottom: 55px;
-            left: 30px;
-
-            transform: rotate(-90deg);
-        }
-
-        .bottom-right {
-            bottom: 55px;
-            right: 30px;
-
-            transform: rotate(180deg);
-        }
-
-        /* =========================
-           MOBILE
-        ========================= */
-
-        @media (max-width: 600px) {
-
-            nav {
-                padding: 0 22px;
-            }
-
-            .nav-right {
-                display: none;
-            }
-
-            .card {
-                padding: 55px 22px;
-            }
-
-            .corner {
-                display: none;
-            }
-
-            footer {
-                padding: 24px 16px 36px;
-            }
-        }
-
-        /* =========================
-           REDUCED MOTION
-        ========================= */
-
-        @media (prefers-reduced-motion: reduce) {
-
-            *,
-            *::before,
-            *::after {
-                animation-duration: .01ms !important;
-                animation-iteration-count: 1 !important;
-                scroll-behavior: auto !important;
-            }
-        }
-    </style>
+    .stage img {
+        max-height: calc(100vh - 24px);
+    }
+}
+</style>
 </head>
 
 <body>
 
-    <!-- every word below has its place -->
+<div class="background"></div>
+<div class="grid"></div>
+<div class="noise"></div>
 
-    <div class="background"></div>
-    <div class="grid"></div>
-    <div class="noise"></div>
+<main class="stage">
 
-    <!-- Navigation -->
+    <!-- Original PNG. No filter or modification. -->
+    <img
+        src="Round2-stage3-final.png"
+        alt="Stage 3"
+    >
 
-    <nav>
-
-        <div class="brand">
-            <div class="brand-dot"></div>
-            BLACK
-        </div>
-
-        <div class="nav-right">
-            PRIVATE SPACE
-        </div>
-
-    </nav>
-
-    <!-- Decorative corners -->
-
-    <div class="corner top-left"></div>
-    <div class="corner top-right"></div>
-    <div class="corner bottom-left"></div>
-    <div class="corner bottom-right"></div>
-
-    <!-- Main -->
-
-    <main class="screen">
-
-        <section class="card" id="card">
-
-            <!-- Final image reference is final.jpg. If final.jpg is not yet present,
-                 onerror swaps in a self-contained inline SVG placeholder for testing.
-                 Once final.jpg exists alongside index.html, it loads normally and
-                 onerror never fires. Nothing else needs to change. -->
-
-            <a href="final.jpg" download class="img-wrap">
-                <img
-                    src="final.jpg"
-                    alt="final"
-                    class="final-img"
-                    onerror="this.onerror=null;this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22640%22 height=%22400%22%3E%3Crect width=%22100%25%22 height=%22100%25%22 fill=%22%230a0a0a%22/%3E%3Crect x=%221%22 y=%221%22 width=%22638%22 height=%22398%22 fill=%22none%22 stroke=%22%23222%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 fill=%22%23555%22 font-family=%22Courier New,monospace%22 font-size=%2214%22 letter-spacing=%223%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22%3EPLACEHOLDER — final.jpg NOT FOUND%3C/text%3E%3C/svg%3E';"
-                >
-            </a>
-
-            <div class="img-caption">↓ final.jpg</div>
-
-        </section>
-
-    </main>
-
-    <footer>
-        NOTHING SPECIAL HERE
-        <span class="seq">10 · 16 · 22</span>
-    </footer>
-
-
-    <script>
-
-        /* =========================
-           SUBTLE MOUSE PARALLAX
-        ========================= */
-
-        const card =
-            document.getElementById("card");
-
-        document.addEventListener(
-            "mousemove",
-            (event) => {
-
-                if (window.innerWidth < 700) {
-                    return;
-                }
-
-                const x =
-                    (event.clientX / window.innerWidth - .5);
-
-                const y =
-                    (event.clientY / window.innerHeight - .5);
-
-                const rotateX =
-                    y * -2.5;
-
-                const rotateY =
-                    x * 2.5;
-
-                card.style.transform =
-                    `perspective(1000px)
-                     rotateX(${rotateX}deg)
-                     rotateY(${rotateY}deg)`;
-
-            }
-        );
-
-        document.addEventListener(
-            "mouseleave",
-            () => {
-
-                card.style.transform =
-                    "perspective(1000px) rotateX(0deg) rotateY(0deg)";
-
-            }
-        );
-
-    </script>
+</main>
 
 </body>
 </html>
